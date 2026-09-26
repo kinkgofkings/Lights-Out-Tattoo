@@ -1,0 +1,6 @@
+{
+  "name": "Lights Out Tattoo",
+  "description": "Premier tattoo studio in Winchester, VA specializing in black and grey realism, custom cover-ups, interactive booking, 100-mile service radius map, and client portfolio by artist Tex.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

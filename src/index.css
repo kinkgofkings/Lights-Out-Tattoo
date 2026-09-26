@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Orbitron', -apple-system, sans-serif;
+    --font-tech: 'Rajdhani', monospace, sans-serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  html {
+    overflow-x: clip;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: #050811;
+    color: #e2e8f0;
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, .font-heading {
+    font-family: var(--font-heading);
+    letter-spacing: 0.05em;
+  }
+
+  .font-tech {
+    font-family: var(--font-tech);
+    letter-spacing: 0.08em;
+  }
+}
+
+/* High Voltage Neon Glow Utilities */
+.neon-text-cyan {
+  color: #00f0ff;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.7), 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+.neon-text-blue {
+  color: #3b82f6;
+  text-shadow: 0 0 8px rgba(59, 130, 246, 0.7), 0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+.neon-glow-box {
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.25), inset 0 0 15px rgba(0, 240, 255, 0.1);
+}
+
+.neon-glow-box-blue {
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3), inset 0 0 15px rgba(59, 130, 246, 0.1);
+}
+
+.neon-border-cyan {
+  border-color: #00f0ff;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+}
+
+/* Double Neon Strobe Edge Animation */
+@keyframes neon-strobe-cyan {
+  0%, 100% {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 4px #00f0ff);
+  }
+  50% {
+    opacity: 0.35;
+    filter: drop-shadow(0 0 1px #00f0ff);
+  }
+  75% {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px #00f0ff);
+  }
+}
+
+@keyframes neon-strobe-blue {
+  0%, 100% {
+    opacity: 0.4;
+    filter: drop-shadow(0 0 2px #0066ff);
+  }
+  50% {
+    opacity: 0.9;
+    filter: drop-shadow(0 0 6px #0066ff);
+  }
+  85% {
+    opacity: 0.2;
+    filter: drop-shadow(0 0 1px #0066ff);
+  }
+}
+
+.animate-strobe-cyan {
+  animation: neon-strobe-cyan 2.4s ease-in-out infinite;
+}
+
+.animate-strobe-blue {
+  animation: neon-strobe-blue 2.8s ease-in-out infinite;
+}
+
+@keyframes voltage-pulse {
+  0%, 100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  20% {
+    opacity: 0.6;
+    transform: scale(0.995);
+  }
+  24% {
+    opacity: 1;
+    transform: scale(1.01);
+  }
+  70% {
+    opacity: 0.85;
+  }
+}
+
+.animate-voltage {
+  animation: voltage-pulse 4s infinite ease-in-out;
+}
+
+/* Custom Cyberpunk Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #060913;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0d233a;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00f0ff;
+}
+
+/* Elementor-like glass panels */
+.glass-panel {
+  background: rgba(11, 19, 36, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+}
+
+.glass-panel-hover {
+  transition: all 0.25s ease;
+}
+.glass-panel-hover:hover {
+  border-color: rgba(0, 240, 255, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 240, 255, 0.15);
+}

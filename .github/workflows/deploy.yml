@@ -1,0 +1,120 @@
+name: Deploy to AWS Lightsail
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lightsail-deploy
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Deploy to Lightsail via SSH
+        id: ssh_deploy
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST || '3.219.32.26' }}
+          username: ${{ secrets.LIGHTSAIL_USER || 'ubuntu' }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          port: ${{ secrets.LIGHTSAIL_PORT || 22 }}
+          script_stop: true
+          script: |
+            echo "==> Deploying commit ${{ github.sha }} to Lightsail..."
+            
+            # Locate application root
+            if [ -d "/home/ubuntu/Tatt-Shop" ]; then
+              cd /home/ubuntu/Tatt-Shop
+            elif [ -d "$HOME/Tatt-Shop" ]; then
+              cd "$HOME/Tatt-Shop"
+            elif [ -d "/var/www/tatt-shop" ]; then
+              cd /var/www/tatt-shop
+            else
+              echo "Repository directory not found! Initializing clone..."
+              git clone https://github.com/cloudcraftstudio/Tatt-Shop.git /home/ubuntu/Tatt-Shop
+              cd /home/ubuntu/Tatt-Shop
+            fi
+
+            # Pull latest changes from main
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Install dependencies & compile production bundle
+            npm install --production=false
+            npm run build
+
+            # Restart PM2 process with updated environment variables
+            if pm2 list | grep -q "tatt-shop"; then
+              pm2 restart tatt-shop --update-env
+            else
+              pm2 start dist/server.cjs --name tatt-shop
+            fi
+            pm2 save
+            
+            echo "==> Lightsail PM2 deployment finished successfully."
+
+      - name: Record Deployment Log
+        if: always()
+        id: record_log
+        run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          COMMIT_SHORT="${GITHUB_SHA::7}"
+          ACTOR="${GITHUB_ACTOR}"
+          
+          if [ "${{ steps.ssh_deploy.outcome }}" = "success" ]; then
+            STATUS="SUCCESS"
+            MSG="Deployed commit ${COMMIT_SHORT} to AWS Lightsail (3.219.32.26) and restarted PM2."
+          else
+            STATUS="FAILURE"
+            MSG="SSH deployment failed at step '${{ steps.ssh_deploy.outcome }}' for commit ${COMMIT_SHORT}."
+          fi
+          
+          LOG_ENTRY="[${TIMESTAMP}] [${COMMIT_SHORT}] [${ACTOR}] - [${STATUS}]: ${MSG}"
+          echo "$LOG_ENTRY" >> deployment.log
+          echo "Recent log entries:"
+          tail -n 5 deployment.log
+
+      - name: Commit and Push deployment.log
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add deployment.log
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(deploy): record deployment log for ${GITHUB_SHA::7} [skip ci]" || true
+            git pull --rebase origin main || git rebase --abort
+            git push origin main || echo "Push skipped or failed due to conflict, continuing..."
+          else
+            echo "No log changes to commit."
+          fi
+
+      - name: Upload Deployment Log Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-log
+          path: deployment.log
+          retention-days: 30

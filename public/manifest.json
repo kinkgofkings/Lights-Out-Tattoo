@@ -1,0 +1,20 @@
+{
+  "id": "/",
+  "name": "Lights Out Tattoo | Winchester VA",
+  "short_name": "LightsOut",
+  "description": "Lights Out Tattoo - Black & Grey Realism and Custom Cover-Ups by Tex in Winchester, VA.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#060913",
+  "theme_color": "#00f0ff",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
