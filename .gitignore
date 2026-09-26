@@ -4,10 +4,13 @@ dist/
 coverage/
 .DS_Store
 *.log
-!deployment.log
 .env*
 !.env.example
 !.env.production.template
+firebase-applet-config.json
 .data/
+*.pem
+*.key
+*.cert
 bun.lock
 bun.lockb

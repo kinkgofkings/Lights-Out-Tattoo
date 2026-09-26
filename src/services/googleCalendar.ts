@@ -1,18 +1,12 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
 import {
-  getAuth,
   signInWithPopup,
   GoogleAuthProvider,
   onAuthStateChanged,
   User,
   signOut
 } from 'firebase/auth';
-import firebaseConfig from '../../firebase-applet-config.json';
+import { app, auth } from '../firebase';
 import { Booking } from '../types';
-
-// Initialize Firebase App & Auth
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-export const auth = getAuth(app);
 
 export const CALENDAR_SCOPES = [
   'https://www.googleapis.com/auth/calendar.events'

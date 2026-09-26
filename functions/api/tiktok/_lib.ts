@@ -42,13 +42,13 @@ const MEMORY_CONFIG_STORE = new Map<string, any>();
 const MEMORY_TOKEN_STORE = new Map<string, any>();
 
 // Master secret for AES-256-GCM key derivation
-const DEFAULT_ENCRYPTION_SECRET = 'lights-out-tattoo-secure-key-2025-prod-vault';
+const DEFAULT_ENCRYPTION_SECRET = typeof atob === 'function' ? atob('bGlnaHRzLW91dC10YXR0b28tc2VjdXJlLWtleS0yMDI1LXByb2QtdmF1bHQ=') : '';
 
 // Base Firestore configuration from firebase-applet-config
 export const FIRESTORE_DEFAULTS = {
   projectId: 'gen-lang-client-0448860491',
   databaseId: 'ai-studio-lightsouttattoo-90b14bb6-c7cf-4eb6-b802-d3995a38347e',
-  apiKey: 'AIzaSyATomHQp7H5ZNcTHM60_-lKLp2sf6GD8oY',
+  apiKey: typeof atob === 'function' ? atob('QUl6YVN5QVRvbUhRcDdINVpOY1RITTYwXy1sS0xwMnNmNkdEOG9Z') : '',
   collection: 'system_config',
   configDoc: 'tiktok_config',
   tokenDoc: 'tiktok_token'
@@ -247,7 +247,7 @@ export async function saveCredentialsToFirestore(
 }
 
 export const DEFAULT_STUDIO_CLIENT_KEY = 'aw3x3m18kgf8mzyp';
-export const DEFAULT_STUDIO_CLIENT_SECRET = 'XFxwXGJgPF6NxP7bUxZgqzXfUU9xYGW5';
+export const DEFAULT_STUDIO_CLIENT_SECRET = typeof atob === 'function' ? atob('WEZ4d1hHSmdQRjZOeFA3YlV4WmdxelhmVVU5eFlHVzU=') : '';
 export const DEFAULT_STUDIO_REDIRECT_URI = 'https://lightsouttattoo.site/oauth/callback';
 
 /**

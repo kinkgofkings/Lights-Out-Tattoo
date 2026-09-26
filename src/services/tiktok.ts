@@ -1,7 +1,7 @@
 import { TikTokReel } from '../types';
 
 export const DEFAULT_STUDIO_CLIENT_KEY = 'aw3x3m18kgf8mzyp';
-export const DEFAULT_STUDIO_CLIENT_SECRET = 'XFxwXGJgPF6NxP7bUxZgqzXfUU9xYGW5';
+export const DEFAULT_STUDIO_CLIENT_SECRET = '';
 export const DEFAULT_STUDIO_REDIRECT_URI = 'https://lightsouttattoo.site/api/tiktok/callback';
 
 export const APPROVED_STUDIO_CALLBACK_URIS = [
@@ -95,7 +95,7 @@ export function getLocalTikTokConfig(): StoredLocalConfig {
       const cleanUri = isDevPreview || isPrePreview ? defaultHostUri : (parsed.redirectUri || defaultHostUri);
       return {
         clientKey: parsed.clientKey || DEFAULT_STUDIO_CLIENT_KEY,
-        clientSecret: parsed.clientSecret || DEFAULT_STUDIO_CLIENT_SECRET,
+        clientSecret: parsed.clientSecret || '',
         redirectUri: cleanUri,
         scopes: parsed.scopes || DEFAULT_STUDIO_SCOPES,
         configured: Boolean(parsed.configured ?? true),
@@ -108,7 +108,7 @@ export function getLocalTikTokConfig(): StoredLocalConfig {
 
   return {
     clientKey: DEFAULT_STUDIO_CLIENT_KEY,
-    clientSecret: DEFAULT_STUDIO_CLIENT_SECRET,
+    clientSecret: '',
     redirectUri: defaultHostUri,
     scopes: DEFAULT_STUDIO_SCOPES,
     configured: true
