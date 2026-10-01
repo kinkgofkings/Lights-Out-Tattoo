@@ -3,17 +3,12 @@ import { getFirestore, setLogLevel } from 'firebase/firestore';
 setLogLevel('silent');
 import { getAuth, signInAnonymously } from 'firebase/auth';
 
-// Safely resolve Firebase API key from environment variable or base64 decoding
-// to prevent triggering GitHub Secret Scanner alerts on public repositories
+// Safely resolve Firebase API key from environment variable
 const getClientApiKey = (): string => {
   if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_API_KEY) {
     return import.meta.env.VITE_FIREBASE_API_KEY;
   }
-  try {
-    return typeof atob === 'function' ? atob('QUl6YVN5QVRvbUhRcDdINVpOY1RITTYwXy1sS0xwMnNmNkdEOG9Z') : '';
-  } catch {
-    return '';
-  }
+  return '';
 };
 
 const firebaseConfig = {

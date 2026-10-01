@@ -46,7 +46,7 @@ app.use((req, _res, next) => {
 const TIKTOK_CONFIG_FILE = path.join(DATA_DIR, 'tiktok-config.json');
 const TIKTOK_TOKEN_FILE = path.join(DATA_DIR, 'tiktok-token.json');
 
-const ENCRYPTION_SECRET = process.env.ENCRYPTION_SECRET || process.env.TIKTOK_ENCRYPTION_KEY || Buffer.from('bGlnaHRzLW91dC10YXR0b28tc2VjdXJlLWtleS0yMDI1LXByb2QtdmF1bHQ=', 'base64').toString('utf-8');
+const ENCRYPTION_SECRET = process.env.ENCRYPTION_SECRET || process.env.TIKTOK_ENCRYPTION_KEY || 'lights-out-tattoo-internal-encryption-salt';
 const CIPHER_KEY = crypto.createHash('sha256').update(ENCRYPTION_SECRET).digest();
 
 function encryptAESGCM(text: string): { ciphertext: string; iv: string; tag: string } {
@@ -71,12 +71,7 @@ function decryptAESGCM(ciphertext: string, ivHex: string, tagHex: string): strin
 }
 
 function getFirebaseApiKey(): string {
-  if (process.env.FIREBASE_API_KEY) return process.env.FIREBASE_API_KEY;
-  try {
-    return Buffer.from('QUl6YVN5QVRvbUhRcDdINVpOY1RITTYwXy1sS0xwMnNmNkdEOG9Z', 'base64').toString('utf-8');
-  } catch {
-    return '';
-  }
+  return process.env.FIREBASE_API_KEY || '';
 }
 
 async function syncConfigToFirestore(secureData: any) {
@@ -287,7 +282,7 @@ fetchConfigFromFirestore().then(cfg => {
 }).catch(() => {});
 
 export const DEFAULT_STUDIO_CLIENT_KEY = 'aw3x3m18kgf8mzyp';
-export const DEFAULT_STUDIO_CLIENT_SECRET = process.env.TIKTOK_CLIENT_SECRET || Buffer.from('WEZ4d1hHSmdQRjZOeFA3YlV4WmdxelhmVVU5eFlHVzU=', 'base64').toString('utf-8');
+export const DEFAULT_STUDIO_CLIENT_SECRET = process.env.TIKTOK_CLIENT_SECRET || '';
 export const DEFAULT_STUDIO_REDIRECT_URI = 'https://lightsouttattoo.site/api/tiktok/callback';
 export const DEFAULT_STUDIO_SCOPES = 'user.info.basic';
 
